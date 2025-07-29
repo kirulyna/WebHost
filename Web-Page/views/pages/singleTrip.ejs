@@ -1,0 +1,397 @@
+<%- include('../partials/header') %>
+<body>
+  <div class="container-scroller">
+    <%- include('../partials/sidebar') %>
+    <div class="container-fluid page-body-wrapper">
+      <%- include('../partials/navbar') %>
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <!-- Trip Details -->
+          <div class="row justify-content-center">
+            <div class="col-md-8 grid-margin stretch-card">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h2 class="card-title text-center mb-4"><%= __('trip_details') %></h2>
+                  <% if (trip) { %>
+                    <ul class="list-group list-group-flush mb-4">
+                    </ul>
+                    <div class="text-center">
+                      <a href="<%= user.role === 'boss' ? '/boss/trips' : '/driver/my-trips' %>" class="btn btn-secondary">
+                        <i class="mdi mdi-arrow-left"></i> <%= __('back_to_trips') %>
+                      </a>
+                    </div>
+                  <% } else { %>
+                    <div class="alert alert-danger text-center"><%= __('trip_not_found') %></div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1. sor: Event Count + Time Distribution -->
+          <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-12 grid-margin stretch-card">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h4 class="card-title text-center mb-4"><%= __('behavior_types_event_count') %></h4>
+                  <canvas id="behaviorChart" height="120"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-12 grid-margin stretch-card">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h4 class="card-title text-center mb-4"><%= __('trip_time_distribution') %></h4>
+                  <canvas id="tripTimeDoughnut" height="120"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. sor: Looking Away + Asleep Events -->
+          <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-12 grid-margin stretch-card">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h4 class="card-title text-center mb-4"><%= __('looking_away_events_duration') %></h4>
+                  <canvas id="looking_away_timesChart" height="120"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-12 grid-margin stretch-card">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h4 class="card-title text-center mb-4"><%= __('asleep_events_duration') %></h4>
+                  <canvas id="asleep_timesChart" height="120"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. sor: Distracted + Tired Events -->
+          <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-12 grid-margin stretch-card">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h4 class="card-title text-center mb-4"><%= __('distracted_events_duration') %></h4>
+                  <canvas id="distracted_timesChart" height="120"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-12 grid-margin stretch-card">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h4 class="card-title text-center mb-4"><%= __('tired_events_duration') %></h4>
+                  <canvas id="tired_timesChart" height="120"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. sor: Event Frequency + 8. diagram (ha lesz) -->
+          <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-12 grid-margin stretch-card">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h4 class="card-title text-center mb-4"><%= __('event_frequency_per_hour') %></h4>
+                  <canvas id="frequencyChart" height="120"></canvas>
+                </div>
+              </div>
+            </div>
+            <!-- 8. diagram helye, ha lesz -->
+            <div class="col-lg-6 col-md-12 grid-margin stretch-card">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h4 class="card-title text-center mb-4"><%= __('critical_events') %></h4>
+                  <canvas id="criticalEventsPie" height="120"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <% if (trip.penaltyPoints || trip.note ) { %>
+            <div class="card mb-3">
+              <div class="card-body">
+                <% if (trip.penaltyPoints) { %>
+                  <p><strong>Penalty Points:</strong> <%= trip.penaltyPoints %></p>
+                <% } %>
+                <% if (trip.note) { %>
+                  <p><strong>Note:</strong> <%= trip.note %></p>
+                <% } %>
+              </div>
+            </div>
+          <% } %>
+
+          <% if (query.success === 'penalty') { %>
+            <div class="alert alert-success text-center mb-3">
+              <%= __('penalty_applied_successfully') %>
+            </div>
+          <% } %>
+          <% if (query.success === 'note') { %>
+            <div class="alert alert-success text-center mb-3">
+              <%= __('note_saved_successfully') %>
+            </div>
+          <% } %>
+
+          <% if (user.role === 'driver') { %>
+            <form id="noteForm" method="POST" action="/trips/<%= trip._id %>/<%= user._id %>/driver-note">
+              <div class="mb-3">
+                <label for="note" class="form-label"><%= __('add_a_note_about_this_trip') %>:</label>
+                <textarea class="form-control" id="note" name="note" rows="3" required><%= '' %></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary"><%= __('save_note') %></button>
+            </form>
+          <% } %>
+
+          <% if (user.role === 'boss') { %>
+            <form method="POST" action="/trips/<%= trip._id %>/<%= user._id %>/boss-note">
+              <div class="mb-3">
+                <label for="note" class="form-label"><%= __('reason_for_penalty') %>:</label>
+                <textarea class="form-control" id="note" name="note" rows="3" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="penaltyPoints" class="form-label"><%= __('penalty_points') %>:</label>
+                <input type="number" class="form-control" id="penaltyPoints" name="penaltyPoints" min="0">
+              </div>
+              <button id="applyPenaltyBtn" class="btn btn-danger"><%= __('apply_penalty') %></button>
+            </form>
+          <% } %>
+
+          <script src="/vendors/chart.js/Chart.min.js"></script>
+
+          <!-- 1. Event Count Chart -->
+          <script>
+            const behaviorTypes = ['looking_away', 'asleep', 'distracted', 'tired'];
+            const statsMap = {};
+            <% trip.behavior_statistics.forEach(function(b) { %>
+              statsMap["<%= b.behavior_type %>"] = <%= b.count %>;
+            <% }); %>
+            const behaviorLabels = behaviorTypes;
+            const behaviorCounts = behaviorTypes.map(type => statsMap[type] || 0);
+
+            const ctx = document.getElementById('behaviorChart').getContext('2d');
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: behaviorLabels,
+                datasets: [{
+                  label: 'Event count',
+                  data: behaviorCounts,
+                  backgroundColor: [
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)'
+                  ],
+                  borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+              }
+            });
+          </script>
+
+          <!-- 2. Time Distribution Doughnut -->
+          <%
+            const behaviorTypesTime = ['looking_away', 'asleep', 'distracted', 'tired'];
+            const statsMapTime = {};
+            trip.behavior_statistics.forEach(b => { statsMapTime[b.behavior_type] = b.total_duration; });
+            const totalTime = trip.total_run_time || 0;
+            const durations = behaviorTypesTime.map(type => statsMapTime[type] || 0);
+            const sumBehaviors = durations.reduce((a, b) => a + b, 0);
+            const normalTime = Math.max(0, totalTime - sumBehaviors);
+            const doughnutData = [...durations, normalTime];
+            const doughnutLabels = ['Looking Away', 'Asleep', 'Distracted', 'Tired', 'Normal'];
+          %>
+          <script>
+            const doughnutLabels = <%- JSON.stringify(doughnutLabels) %>;
+            const doughnutData = <%- JSON.stringify(doughnutData) %>;
+            const doughnutColors = [
+              'rgba(54, 162, 235, 0.7)', 'rgba(255, 99, 132, 0.7)',
+              'rgba(255, 206, 86, 0.7)', 'rgba(75, 192, 192, 0.7)',
+              'rgba(100, 255, 100, 0.7)'
+            ];
+            const doughnutBorders = [
+              'rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)',
+              'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)',
+              'rgba(100, 255, 100, 1)'
+            ];
+
+            const ctxDoughnut = document.getElementById('tripTimeDoughnut').getContext('2d');
+            new Chart(ctxDoughnut, {
+              type: 'doughnut',
+              data: {
+                labels: doughnutLabels,
+                datasets: [{
+                  data: doughnutData,
+                  backgroundColor: doughnutColors,
+                  borderColor: doughnutBorders,
+                  borderWidth: 2
+                }]
+              },
+              options: {
+                responsive: true,
+                plugins: { legend: { position: 'top' } }
+              }
+            });
+          </script>
+
+          <!-- 3-6. Behavior Duration Charts -->
+          <% const behaviorTimeFields = [
+            { key: 'looking_away_times', label: 'Looking Away Events', color: 'rgba(54, 162, 235, 0.7)', border: 'rgba(54, 162, 235, 1)' },
+            { key: 'asleep_times', label: 'Asleep Events', color: 'rgba(255, 99, 132, 0.7)', border: 'rgba(255, 99, 132, 1)' },
+            { key: 'distracted_times', label: 'Distracted Events', color: 'rgba(255, 206, 86, 0.7)', border: 'rgba(255, 206, 86, 1)' },
+            { key: 'tired_times', label: 'Tired Events', color: 'rgba(75, 192, 192, 0.7)', border: 'rgba(75, 192, 192, 1)' }
+          ]; %>
+
+          <script>
+            const chartData = {
+              <% behaviorTimeFields.forEach(function(field, index) { %>
+                <%= field.key %>: {
+                  data: <%- JSON.stringify(trip[field.key] || []) %>,
+                  label: '<%= field.label %>',
+                  color: '<%= field.color %>',
+                  border: '<%= field.border %>'
+                }<%= index < behaviorTimeFields.length - 1 ? ',' : '' %>
+              <% }); %>
+            };
+
+            Object.keys(chartData).forEach(function(key) {
+              const fieldData = chartData[key];
+              const labels = fieldData.data.map((_, i) => `#${i + 1}`);
+              const ctx = document.getElementById(key + 'Chart').getContext('2d');
+
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: labels,
+                  datasets: [{
+                    label: 'Duration (sec)',
+                    data: fieldData.data,
+                    backgroundColor: fieldData.color,
+                    borderColor: fieldData.border,
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  plugins: { legend: { display: false } },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      title: { display: true, text: 'Duration (sec)' }
+                    }
+                  }
+                }
+              });
+            });
+          </script>
+
+          <!-- 7. Frequency Chart -->
+          <script>
+            const freqLabels = <%- JSON.stringify(trip.behavior_statistics.map(b => b.behavior_type)) %>;
+            const freqData = <%- JSON.stringify(trip.behavior_statistics.map(b => b.frequency)) %>;
+            const freqColors = [
+              'rgba(54, 162, 235, 0.7)', 'rgba(255, 99, 132, 0.7)',
+              'rgba(255, 206, 86, 0.7)', 'rgba(75, 192, 192, 0.7)'
+            ];
+
+            const ctxFreq = document.getElementById('frequencyChart').getContext('2d');
+            new Chart(ctxFreq, {
+              type: 'bar',
+              data: {
+                labels: freqLabels,
+                datasets: [{
+                  label: 'Frequency per Hour',
+                  data: freqData,
+                  backgroundColor: freqColors,
+                  borderColor: freqColors.map(c => c.replace('0.7', '1')),
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Events per hour' }
+                  }
+                }
+              }
+            });
+          </script>
+
+          <!-- 8. chart - critical events -->
+           <script>
+            const criticalEvents = <%- JSON.stringify(trip.critical_events || []) %>;
+            const criticalLabels = criticalEvents.map((e) =>
+              e.event_type.charAt(0).toUpperCase() + e.event_type.slice(1).replace('_', ' ')
+            );
+
+            const criticalDurations = criticalEvents.map((e) => e.duration || 0);
+
+            const criticalColors = [
+              'rgba(255, 99, 132, 0.7)',  // looking away
+              'rgba(54, 162, 235, 0.7)',  // distracted
+              'rgba(255, 206, 86, 0.7)',  // tired
+              'rgba(75, 192, 192, 0.7)' // asleep
+            ];
+
+            const criticalBorders = [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)'
+            ];
+
+            const ctxCritical = document.getElementById('criticalEventsPie').getContext('2d');
+            new Chart(ctxCritical, {
+              type: 'pie',
+              data: {
+                labels: criticalLabels,
+                datasets: [{
+                  data: criticalDurations,
+                  backgroundColor: criticalColors.slice(0, criticalEvents.length),
+                  borderColor: criticalBorders.slice(0, criticalEvents.length),
+                  borderWidth: 2
+                }]
+              },
+              options: {
+                responsive: true,
+                plugins: {
+                  legend: { position: 'top' }
+                }
+              }
+            });
+           </script>
+
+        </div>
+        <%- include('../partials/footer') %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/vendors/js/vendor.bundle.base.js"></script>
+  <script src="/vendors/progressbar.js/progressbar.min.js"></script>
+  <script src="/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+  <script src="/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+  <script src="/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+  <script src="/js/off-canvas.js"></script>
+  <script src="/js/hoverable-collapse.js"></script>
+  <script src="/js/misc.js"></script>
+  <script src="/js/settings.js"></script>
+  <script src="/js/todolist.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

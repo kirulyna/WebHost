@@ -1,0 +1,65 @@
+<%- include('../partials/header') %>
+<body>
+  <div class="container-scroller">
+    <%- include('../partials/sidebar') %>
+
+    <div class="container-fluid page-body-wrapper">
+      <%- include('../partials/navbar') %>
+
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body text-center">
+                  <% if (user) { %>
+                    <h1 class="card-title mb-3"><%= __('welcome') %>, <%= user.username %>!</h1>
+                    <p class="card-text mb-4">This is the main page of the application.</p>
+                    <% if (user.role === 'admin') { %>
+                      <div class="mb-4">
+                        <p>As admin, your functions are listed on the sidebar.</p>
+                      </div>
+                    <% } %>
+                    <% if (user.role === 'driver') { %>
+                      <a>Hello driver</a>
+                    <% } else if (user.role === 'boss') { %>
+                      <div class="mb-4">
+                        <p>This is the profile of all drivers and their trips.</p>
+                      </div>
+                    <% } %>
+                  <% } else { %>
+                    <h1 class="card-title mb-3"><%= __('welcome') %>!</h1>
+                    <p class="card-text mb-4">This is the main page of the application.</p>
+                    <p class="text-muted"><%= __('please_login_to_continue') %>.</p>
+                    <div class="mb-4">
+                      <a href="/auth/login" class="btn btn-secondary">
+                        <i class="mdi mdi-login"></i> <%= __('login') %>
+                      </a>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Footer -->
+        <%- include('../partials/footer') %>
+        <!-- End Footer -->
+      </div>
+    </div>
+  </div>
+  <!-- Scripts (Corona template JS-ek) -->
+  <script src="/vendors/js/vendor.bundle.base.js"></script>
+  <script src="/vendors/chart.js/Chart.min.js"></script>
+  <script src="/vendors/progressbar.js/progressbar.min.js"></script>
+  <script src="/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+  <script src="/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+  <script src="/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+  <script src="/js/off-canvas.js"></script>
+  <script src="/js/hoverable-collapse.js"></script>
+  <script src="/js/misc.js"></script>
+  <script src="/js/settings.js"></script>
+  <script src="/js/todolist.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

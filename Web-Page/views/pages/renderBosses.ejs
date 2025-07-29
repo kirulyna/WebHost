@@ -1,0 +1,61 @@
+<%- include('../partials/header') %>
+<body>
+  <div class="container-scroller">
+    <!-- Sidebar -->
+    <%- include('../partials/sidebar') %>
+    <!-- End Sidebar -->
+
+    <div class="container-fluid page-body-wrapper">
+      <!-- Navbar -->
+      <%- include('../partials/navbar') %>
+      <!-- End Navbar -->
+
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <h2 class="mb-4">Bosses</h2>
+          <% if (bosses.length === 0) { %>
+            <div class="alert alert-info">No bosses found.</div>
+          <% } else { %>
+            <div class="row">
+              <% bosses.forEach(boss => { %>
+                <div class="col-md-4 mb-4">
+                  <a href="/admin/bosses/<%= boss._id %>" style="text-decoration: none; color: inherit;">
+                    <div class="card text-center h-100">
+                      <div class="card-body d-flex flex-column align-items-center">
+                        <img
+                          src="/images/faces/<%= boss._id %>.jpg"
+                          alt="Profile"
+                          class="rounded-circle mb-3"
+                          style="width: 80px; height: 80px; object-fit: cover;"
+                          onerror="this.onerror=null;this.src='/images/default-avatar.png';"
+                        />
+                        <h5 class="card-title"><%= boss.name %></h5>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+        </div>
+        <!-- Footer -->
+        <%- include('../partials/footer') %>
+        <!-- End Footer -->
+      </div>
+    </div>
+  </div>
+  <!-- Scripts (Corona template JS-ek) -->
+  <script src="/vendors/js/vendor.bundle.base.js"></script>
+  <script src="/vendors/chart.js/Chart.min.js"></script>
+  <script src="/vendors/progressbar.js/progressbar.min.js"></script>
+  <script src="/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+  <script src="/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+  <script src="/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+  <script src="/js/off-canvas.js"></script>
+  <script src="/js/hoverable-collapse.js"></script>
+  <script src="/js/misc.js"></script>
+  <script src="/js/settings.js"></script>
+  <script src="/js/todolist.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

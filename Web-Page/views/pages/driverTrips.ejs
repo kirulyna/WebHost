@@ -1,0 +1,30 @@
+<%- include('../partials/header') %>
+<body>
+  <div class="container mt-5">
+    <h2>Your Trips</h2>
+    <% if (trips.length === 0) { %>
+      <div class="alert alert-info">You have no trips yet.</div>
+    <% } else { %>
+      <table class="table table-dark table-striped mt-4">
+        <thead>
+          <tr>
+            <th><%= __('date') %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% trips.forEach(trip => { %>
+            <tr onclick="window.location='/trips/<%= trip._id %>'" style="cursor: pointer;">
+              <td>
+                <a href="/trips/<%= trip._id %>">
+                  <%= trip.date.toLocaleDateString() %>
+                <%= trip.date.toLocaleDateString() %>
+              </td>
+              <td><%= trip.contest || '-' %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+  </div>
+</body>
+</html>

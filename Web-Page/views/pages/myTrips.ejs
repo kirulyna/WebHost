@@ -1,0 +1,53 @@
+<%- include('../partials/header') %>
+<body>
+  <div class="container-scroller">
+    <%- include('../partials/sidebar') %>
+    <div class="container-fluid page-body-wrapper">
+      <%- include('../partials/navbar') %>
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <h2 class="mb-4"><%= __('my_trips') %></h2>
+          <% if (trips.length === 0) { %>
+            <div class="alert alert-info"><%= __('you_have_no_trips_yet') %>.</div>
+          <% } else { %>
+            <div class="table-responsive">
+              <table class="table table-dark table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th><%= __('date') %></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% trips.forEach((trip, idx) => { %>
+                    <tr onclick="window.location='/trips/<%= trip._id %>/<%= user._id %>'" style="cursor: pointer;">
+                      <td><%= idx + 1 %></td>
+                      <td>
+                        <%= trip.date ? new Date(trip.date).toLocaleDateString() : '-' %>
+                      </td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+        </div>
+        <%- include('../partials/footer') %>
+      </div>
+    </div>
+  </div>
+  <!-- Corona template JS-ek -->
+  <script src="/vendors/js/vendor.bundle.base.js"></script>
+  <script src="/vendors/chart.js/Chart.min.js"></script>
+  <script src="/vendors/progressbar.js/progressbar.min.js"></script>
+  <script src="/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+  <script src="/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+  <script src="/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+  <script src="/js/off-canvas.js"></script>
+  <script src="/js/hoverable-collapse.js"></script>
+  <script src="/js/misc.js"></script>
+  <script src="/js/settings.js"></script>
+  <script src="/js/todolist.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

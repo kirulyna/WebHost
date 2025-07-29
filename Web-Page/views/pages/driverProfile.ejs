@@ -1,0 +1,166 @@
+<%- include('../partials/header') %>
+<body>
+  <div class="container-scroller">
+    <%- include('../partials/sidebar') %>
+
+    <div class="container-fluid page-body-wrapper">
+      <%- include('../partials/navbar') %>
+
+      <div class="main-panel">
+        <div class="content-wrapper d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+          <div class="card p-4" style="max-width: 400px; width: 100%;">
+            <div class="d-flex flex-column align-items-center">
+              <img
+                src="/images/faces/<%= driver._id %>.jpg"
+                alt="Profile"
+                class="rounded-circle mb-3"
+                style="width: 120px; height: 120px; object-fit: cover;"
+                onerror="this.onerror=null;this.src='/images/default-avatar.png';"
+              />
+              <h3 class="mb-2"><%= driver.name %></h3>
+              <p class="text-muted mb-1">Role: <%= driver.role %></p>
+              <!-- További mezők -->
+               <button id="showTripsBtn" class="btn btn-primary mt-3 mb-2">
+                <%= __('show_trips') %>
+               </button>
+               <div id="tripsList" class="w-100"></div>
+               <script>
+                  let tripsVisible = false;
+
+                  function createLoadingMessage() {
+                    const div = document.createElement('div');
+                    div.className = 'text-center mt-2';
+                    div.textContent = 'Loading...';
+                    return div;
+                  }
+
+                  function createErrorMessage(message) {
+                    const div = document.createElement('div');
+                    div.className = 'alert alert-danger mt-2';
+                    div.textContent = message;
+                    return div;
+                  }
+
+                  function createInfoMessage(message) {
+                    const div = document.createElement('div');
+                    div.className = 'alert alert-info mt-2';
+                    div.textContent = message;
+                    return div;
+                  }
+
+                  function createTripListItem(trip, currentUserId) {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    
+                    const link = document.createElement('a');
+                    link.href = `/trips/${trip._id}/${currentUserId}`;
+                    link.className = 'text-decoration-none';
+                    
+                    const date = new Date(trip.date).toLocaleDateString();
+                    link.textContent = `${date}`;
+                    
+                    li.appendChild(link);
+                    return li;
+                  }
+
+                  function createTripsList(trips, currentUserId) {
+                    const ul = document.createElement('ul');
+                    ul.className = 'list-group mt-2';
+                    
+                    trips.forEach(trip => {
+                      const listItem = createTripListItem(trip, currentUserId);
+                      ul.appendChild(listItem);
+                    });
+                    
+                    return ul;
+                  }
+
+                  function clearElement(element) {
+                    while (element.firstChild) {
+                      element.removeChild(element.firstChild);
+                    }
+                  }
+
+                  async function loadTrips(driverId, tripsList, currentUserId) {
+                    try {
+                      clearElement(tripsList);
+                      tripsList.appendChild(createLoadingMessage());
+                      
+                      const response = await fetch(`/api/drivers/${driverId}/trips`);
+                      
+                      if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                      }
+                      
+                      const trips = await response.json();
+                      
+                      clearElement(tripsList);
+                      
+                      if (!trips.length) {
+                        tripsList.appendChild(createInfoMessage('No trips found.'));
+                        return;
+                      }
+                      
+                      const tripList = createTripsList(trips, currentUserId);
+                      tripsList.appendChild(tripList);
+                      
+                    } catch (error) {
+                      console.error('Error loading trips:', error);
+                      clearElement(tripsList);
+                      tripsList.appendChild(createErrorMessage('Error loading trips.'));
+                    }
+                  }
+
+                  // Event listener
+                  document.getElementById('showTripsBtn').addEventListener('click', async function () {
+                    const tripsList = document.getElementById('tripsList');
+                    const btn = this;
+
+                    if (!tripsVisible) {
+                      // Trip-ek betöltése
+                      const driverId = '<%= driver._id %>';
+                      const currentUserId = '<%= user._id %>';
+
+                      // Gomb letiltása a betöltés alatt
+                      btn.disabled = true;
+                      btn.textContent = 'Loading...';
+
+                      await loadTrips(driverId, tripsList, currentUserId);
+                      
+                      // Gomb visszaállítása
+                      btn.disabled = false;
+                      btn.textContent = 'Hide Trips';
+                      tripsVisible = true;
+                      
+                    } else {
+                      // Trip-ek elrejtése
+                      clearElement(tripsList);
+                      btn.textContent = 'Show Trips';
+                      tripsVisible = false;
+                    }
+                  });
+                </script>
+            </div>
+          </div>
+        </div>
+        <!-- Footer -->
+        <%- include('../partials/footer') %>
+        <!-- End Footer -->
+      </div>
+    </div>
+  </div>
+  <!-- Scripts (Corona template JS-ek) -->
+  <script src="/vendors/js/vendor.bundle.base.js"></script>
+  <script src="/vendors/chart.js/Chart.min.js"></script>
+  <script src="/vendors/progressbar.js/progressbar.min.js"></script>
+  <script src="/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+  <script src="/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+  <script src="/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+  <script src="/js/off-canvas.js"></script>
+  <script src="/js/hoverable-collapse.js"></script>
+  <script src="/js/misc.js"></script>
+  <script src="/js/settings.js"></script>
+  <script src="/js/todolist.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
