@@ -55,5 +55,17 @@
   "reason_for_penalty": "Reason for Penalty",
   "apply_penalty": "Apply Penalty",
   "no_trips_found": "No trips found",
-  "manage_bosses": "Manage Bosses"
+  "manage_bosses": "Manage Bosses",
+  "all_trips": "All Trips",
+  "manage_employees": "Manage Employees",
+  "behavior_types_event_count": "Behavior Types - Event Count",
+  "trip_time_distribution": "Trip Time Distribution",
+  "critical_events": "Critical Events",
+  "note_saved_successfully": "Note saved successfully",
+  "penalty_applied_successfully": "Penalty applied successfully",
+  "event_frequency_per_hour": "Event Frequency per Hour",
+  "looking_away_events_duration": "Looking Away Events - Duration",
+  "asleep_events_duration": "Asleep Events - Duration",
+  "distracted_events_duration": "Distracted Events - Duration",
+  "tired_events_duration": "Tired Events - Duration"
 }

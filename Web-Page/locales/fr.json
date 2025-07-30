@@ -65,5 +65,7 @@
   "event_frequency_per_hour": "Fréquence des événements par heure",
   "critical_events": "Événements critiques",
   "note_saved_successfully": "Note enregistrée avec succès",
-  "penalty_applied_successfully": "Pénalité appliquée avec succès"
+  "penalty_applied_successfully": "Pénalité appliquée avec succès",
+  "all_trips": "Tous les trajets",
+  "manage_employees": "Gérer les employés"
 }

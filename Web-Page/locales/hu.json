@@ -55,5 +55,17 @@
   "reason_for_penalty": "Büntetés indoka",
   "apply_penalty": "Büntetés alkalmazása",
   "no_trips_found": "Nem található út",
-  "manage_bosses": "Főnökök kezelése"
+  "manage_bosses": "Főnökök kezelése",
+  "all_trips": "Összes út",
+  "manage_employees": "Alkalmazottak kezelése",
+  "behavior_types_event_count": "Viselkedéstípusok - Eseményszám",
+  "trip_time_distribution": "Utazási idő eloszlása",
+  "critical_events": "Kritikus események",
+  "note_saved_successfully": "A megjegyzés sikeresen mentve",
+  "penalty_applied_successfully": "A büntetés sikeresen alkalmazva",
+  "event_frequency_per_hour": "Események gyakorisága óránként",
+  "looking_away_events_duration": "Elfordulásos események - Időtartam",
+  "asleep_events_duration": "Elalvásos események - Időtartam",
+  "distracted_events_duration": "Figyelemeltereléses események - Időtartam",
+  "tired_events_duration": "Fáradtságos események - Időtartam"
 }

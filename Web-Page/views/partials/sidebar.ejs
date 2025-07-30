@@ -84,19 +84,11 @@
       </li>
     <% } else if (user && user.role === 'admin') { %>
       <li class="nav-item menu-items">
-        <a class="nav-link" href="/auth/register">
+        <a class="nav-link" href="/admin/manage-employees">
           <span class="menu-icon">
-            <i class="mdi mdi-account-supervisor"></i>
+            <i class="mdi mdi-account-group"></i>
           </span>
-          <span class="menu-title"><%= __('register_new_employee') %></span>
-        </a>
-      </li>
-      <li class="nav-item menu-items">
-        <a class="nav-link" href="/admin/remove-employee">
-          <span class="menu-icon">
-            <i class="mdi mdi-account-edit"></i>
-          </span>
-          <span class="menu-title"><%= __('remove_employee') %></span>
+          <span class="menu-title"><%= __('manage_employees') %></span>
         </a>
       </li>
       <li class="nav-item menu-items">

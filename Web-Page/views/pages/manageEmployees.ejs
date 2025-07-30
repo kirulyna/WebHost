@@ -1,0 +1,56 @@
+<%- include('../partials/header') %>
+<body>
+  <div class="container-scroller">
+    <%- include('../partials/sidebar') %>
+
+    <div class="container-fluid page-body-wrapper">
+      <%- include('../partials/navbar') %>
+
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body text-center">
+                  <h1 class="card-title mb-3">
+                    <i class="mdi mdi-account-group"></i>
+                    <%= __('manage_employees') %>
+                  </h1>
+                  <div class="row justify-content-center">
+                    <div class="col-md-4 mb-3">
+                      <a href="/auth/register" class="btn btn-primary btn-lg btn-block">
+                        <i class="mdi mdi-account-plus"></i>
+                        <%= __('register_new_employee') %>
+                      </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <a href="/admin/remove-employee" class="btn btn-danger btn-lg btn-block">
+                        <i class="mdi mdi-account-remove"></i>
+                        <%= __('remove_employee') %>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%- include('../partials/footer') %>
+      </div>
+    </div>
+  </div>
+  <!-- Scripts (Corona template JS-ek) -->
+  <script src="/vendors/js/vendor.bundle.base.js"></script>
+  <script src="/vendors/chart.js/Chart.min.js"></script>
+  <script src="/vendors/progressbar.js/progressbar.min.js"></script>
+  <script src="/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+  <script src="/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+  <script src="/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+  <script src="/js/off-canvas.js"></script>
+  <script src="/js/hoverable-collapse.js"></script>
+  <script src="/js/misc.js"></script>
+  <script src="/js/settings.js"></script>
+  <script src="/js/todolist.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -12,9 +12,9 @@
 
       <div class="main-panel">
         <div class="content-wrapper">
-          <h2 class="mb-4">My Drivers</h2>
+          <h2 class="mb-4"><%= __('my_drivers') %></h2>
           <% if (drivers.length === 0) { %>
-            <div class="alert alert-info">No drivers found.</div>
+            <div class="alert alert-info"><%= __('no_drivers_found') %></div>
           <% } else { %>
             <div class="row">
               <% drivers.forEach(driver => { %>

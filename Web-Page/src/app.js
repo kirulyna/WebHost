@@ -26,7 +26,6 @@ import apiAdminRoutes from './routes/api/adminRoutes.js';
 import apiTripRoutes from './routes/api/tripRoutes.js';
 
 dotenv.config();
-
 connectDB();
 
 const filename = fileURLToPath(import.meta.url);
@@ -35,13 +34,15 @@ const dirname = path.dirname(filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+console.log('Starting server...');
+
 // --- WEB SETTINGS ---
 app.set('view engine', 'ejs');
 app.set('views', [path.join(dirname, '../views/pages'), path.join(dirname, '../views')]);
 
 i18n.configure({
     locales: ['en', 'hu', 'ro', 'de', 'fr'],
-    directory: path.join(dirname, '../locales'),
+    directory: path.join(process.cwd(), 'locales'),
     defaultLocale: 'en',
     cookie: 'lang',
     queryParameter: 'lang',
@@ -75,7 +76,6 @@ app.use('/api/profiles', apiProfileRoutes);
 app.use('/api/admin', apiAdminRoutes);
 app.use('/api/trips', apiTripRoutes);
 
-//app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-//});
-export default app;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});

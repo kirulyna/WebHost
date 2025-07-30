@@ -65,5 +65,7 @@
   "event_frequency_per_hour": "Frecvența evenimentelor pe oră",
   "critical_events": "Evenimente critice",
   "note_saved_successfully": "Notița a fost salvată cu succes",
-  "penalty_applied_successfully": "Penalizare aplicată cu succes"
+  "penalty_applied_successfully": "Penalizare aplicată cu succes",
+  "all_trips": "Toate călătoriile",
+  "manage_employees": "Gestionează angajații"
 }
