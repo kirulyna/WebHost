@@ -14,19 +14,6 @@
                 <div class="card-body text-center">
                   <% if (user) { %>
                     <h1 class="card-title mb-3"><%= __('welcome') %>, <%= user.username %>!</h1>
-                    <p class="card-text mb-4">This is the main page of the application.</p>
-                    <% if (user.role === 'admin') { %>
-                      <div class="mb-4">
-                        <p>As admin, your functions are listed on the sidebar.</p>
-                      </div>
-                    <% } %>
-                    <% if (user.role === 'driver') { %>
-                      <a>Hello driver</a>
-                    <% } else if (user.role === 'boss') { %>
-                      <div class="mb-4">
-                        <p>This is the profile of all drivers and their trips.</p>
-                      </div>
-                    <% } %>
                   <% } else { %>
                     <h1 class="card-title mb-3"><%= __('welcome') %>!</h1>
                     <p class="card-text mb-4">This is the main page of the application.</p>
@@ -42,9 +29,7 @@
             </div>
           </div>
         </div>
-        <!-- Footer -->
         <%- include('../partials/footer') %>
-        <!-- End Footer -->
       </div>
     </div>
   </div>

@@ -113,10 +113,10 @@
             <div class="card mb-3">
               <div class="card-body">
                 <% if (trip.penaltyPoints) { %>
-                  <p><strong>Penalty Points:</strong> <%= trip.penaltyPoints %></p>
+                  <p><strong><%= __('penalty_points') %>:</strong> <%= trip.penaltyPoints %></p>
                 <% } %>
                 <% if (trip.note) { %>
-                  <p><strong>Note:</strong> <%= trip.note %></p>
+                  <p><strong><%= __('note') %>:</strong> <%= trip.note %></p>
                 <% } %>
               </div>
             </div>
