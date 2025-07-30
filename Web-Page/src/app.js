@@ -76,6 +76,8 @@ app.use('/api/profiles', apiProfileRoutes);
 app.use('/api/admin', apiAdminRoutes);
 app.use('/api/trips', apiTripRoutes);
 
-app.listen(PORT, () => {
+/*app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-});
+});*/
+
+export default app;
