@@ -42,11 +42,11 @@ app.set('views', [path.join(dirname, '../views/pages'), path.join(dirname, '../v
 
 i18n.configure({
     locales: ['en', 'hu', 'ro', 'de', 'fr'],
-    directory: path.join(process.cwd(), 'locales'),
+    directory: path.join(dirname, '../locales'),
     defaultLocale: 'en',
     cookie: 'lang',
     queryParameter: 'lang',
-    autoReload: true,
+    autoReload: false,
     updateFiles: false,
 });
 
